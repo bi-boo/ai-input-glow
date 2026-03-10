@@ -54,12 +54,25 @@
   box-shadow: none !important;
 }
 
-/* ========== 5. Gemini 内层清理 ========== */
+/* ========== 5. Gemini ========== */
 
-/* 自定义元素默认 inline，需要改为 block 才能正确渲染 border */
+/*
+ * input-area-v2 是自定义元素名，直接写描边规则。
+ * CSS 选择器不受 React className 管理影响，永不失效。
+ */
 input-area-v2 {
   display: block;
   border-radius: 28px;
+  border: 2px solid transparent !important;
+  box-sizing: border-box !important;
+  background-image:
+    linear-gradient(var(--ai-glow-bg), var(--ai-glow-bg)),
+    linear-gradient(90deg, #BC82F3, #F5B9EA, #8D99FF, #AAEEEE, #FF6778, #FFBA71, #C686FF, #BC82F3) !important;
+  background-origin: padding-box, border-box !important;
+  background-clip: padding-box, border-box !important;
+  background-size: 400% 400% !important;
+  animation: ios-ai-border-flow 8s linear infinite !important;
+  box-shadow: none !important;
 }
 
 /* 内层输入区域：去除默认边框和阴影，避免双重描边 */
@@ -69,7 +82,25 @@ input-area-v2 div[data-node-type="input-area"] {
   box-shadow: none !important;
 }
 
-/* ========== 6. Grok 内层清理 ========== */
+/* ========== 6. Grok ========== */
+
+/*
+ * div.query-bar 直接写描边规则，不依赖 .ai-glow-active class。
+ * 修复：Grok 的 React 在 textarea 高度变化时会重置 className，
+ * 导致外部添加的 class 被清除。CSS 选择器不受此影响。
+ */
+div.query-bar {
+  border: 2px solid transparent !important;
+  box-sizing: border-box !important;
+  background-image:
+    linear-gradient(var(--ai-glow-bg), var(--ai-glow-bg)),
+    linear-gradient(90deg, #BC82F3, #F5B9EA, #8D99FF, #AAEEEE, #FF6778, #FFBA71, #C686FF, #BC82F3) !important;
+  background-origin: padding-box, border-box !important;
+  background-clip: padding-box, border-box !important;
+  background-size: 400% 400% !important;
+  animation: ios-ai-border-flow 8s linear infinite !important;
+  box-shadow: none !important;
+}
 
 /* 文本域：透明背景，显示容器自身的渐变描边 */
 div.query-bar textarea {

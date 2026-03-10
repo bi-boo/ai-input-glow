@@ -44,14 +44,30 @@
   }
 
   /**
-   * 找到容器后加上 class，仅此而已。
-   * GLOW_ATTR 标记防止对同一元素重复处理。
+   * 找到容器后加上 class。
+   *
+   * GLOW_ATTR 标记"已设置过监听器的容器"，防止重复绑定。
+   * class 的存在性单独检查，以便在 React 重置 className 后能补回来。
    */
   function applyGlow() {
     const container = findContainer();
-    if (!container || container.hasAttribute(GLOW_ATTR)) return;
-    container.setAttribute(GLOW_ATTR, '');
-    container.classList.add(GLOW_CLASS);
+    if (!container) return;
+
+    // 首次发现此容器：标记 + 添加 class 属性监听器
+    if (!container.hasAttribute(GLOW_ATTR)) {
+      container.setAttribute(GLOW_ATTR, '');
+      // 监听 class 属性变化：React 重置 className 时立即补回 glow class
+      new MutationObserver(function () {
+        if (!container.classList.contains(GLOW_CLASS)) {
+          container.classList.add(GLOW_CLASS);
+        }
+      }).observe(container, { attributes: true, attributeFilter: ['class'] });
+    }
+
+    // 确保 class 存在（首次 or 被 React 移除后重新触发时）
+    if (!container.classList.contains(GLOW_CLASS)) {
+      container.classList.add(GLOW_CLASS);
+    }
   }
 
   // 初次执行：DOM 已就绪则立即运行，否则等待
