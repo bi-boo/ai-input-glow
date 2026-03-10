@@ -1,0 +1,10 @@
+{
+  "extensionName": {
+    "message": "对话框动感光圈",
+    "description": "The name of the extension."
+  },
+  "extensionDescription": {
+    "message": "为 ChatGPT 和 Gemini 输入框增添一个酷炫的彩色动态光环，让您的聊天界面与众不同。",
+    "description": "The description of the extension."
+  }
+}

@@ -1,0 +1,77 @@
+/*
+ * glow.css - 唯一 CSS 文件
+ * 职责：定义流光动画 + 统一描边 class + 各站点内层清理
+ * 不修改 overflow / position 等布局属性
+ */
+
+/* ========== 1. 动画关键帧 ========== */
+
+@keyframes ios-ai-border-flow {
+  from { background-position: 0% 50%; }
+  to   { background-position: 100% 50%; }
+}
+
+/* ========== 2. 背景色变量（适配暗色模式） ========== */
+
+:root {
+  --ai-glow-bg: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ai-glow-bg: #212121;
+  }
+}
+
+/* ========== 3. 统一描边 class ========== */
+/*
+ * 技术说明：
+ * - border: 2px solid transparent  →  占用盒模型空间但透明
+ * - box-sizing: border-box          →  border 消耗自身空间，不撑大容器
+ * - background 双层：
+ *     第一层 (padding-box)：纯色填充，遮住内容区域的渐变
+ *     第二层 (border-box)：彩虹渐变，仅 border 区域可见
+ * - 不需要 overflow: visible，border 是元素自身盒模型的一部分
+ */
+.ai-glow-active {
+  border: 2px solid transparent !important;
+  box-sizing: border-box !important;
+  background-image:
+    linear-gradient(var(--ai-glow-bg), var(--ai-glow-bg)),
+    linear-gradient(90deg, #BC82F3, #F5B9EA, #8D99FF, #AAEEEE, #FF6778, #FFBA71, #C686FF, #BC82F3) !important;
+  background-origin: padding-box, border-box !important;
+  background-clip: padding-box, border-box !important;
+  background-size: 400% 400% !important;
+  animation: ios-ai-border-flow 8s linear infinite !important;
+  box-shadow: none !important;
+}
+
+/* ========== 4. ChatGPT 内层清理 ========== */
+
+/* ProseMirror 编辑器：移除默认轮廓和阴影，容器已有描边 */
+#prompt-textarea {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ========== 5. Gemini 内层清理 ========== */
+
+/* 自定义元素默认 inline，需要改为 block 才能正确渲染 border */
+input-area-v2 {
+  display: block;
+  border-radius: 28px;
+}
+
+/* 内层输入区域：去除默认边框和阴影，避免双重描边 */
+input-area-v2 div[data-node-type="input-area"] {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ========== 6. Grok 内层清理 ========== */
+
+/* 文本域：透明背景，显示容器自身的渐变描边 */
+div.query-bar textarea {
+  background-color: transparent !important;
+}
